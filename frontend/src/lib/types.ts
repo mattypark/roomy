@@ -1,0 +1,32 @@
+// Shared data models — mirrored in backend/models.py
+
+export interface Zone {
+  row: number;
+  col: number;
+  /** 0.0 = spotless, 1.0 = disaster */
+  clutterScore: number;
+  /** filled by Claude deep analysis in Stage 5 */
+  reason?: string;
+  suggestion?: string;
+}
+
+export interface ScanResult {
+  zones: Zone[];
+  gridRows: number;
+  gridCols: number;
+  /** 0.0–1.0 overall */
+  overallScore: number;
+  /** letter rank S/A/B/C/D */
+  rank: string;
+  /** "local" = CV grid pass, "claude" = deep analysis, "demo" = mocked */
+  source: 'local' | 'claude' | 'demo';
+}
+
+export interface HealthResponse {
+  status: string;
+  stage: number;
+  claudeEnabled: boolean;
+}
+
+export const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';

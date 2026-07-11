@@ -1,0 +1,23 @@
+# deps
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+
+# env / secrets
+.env
+.env.local
+.env*.local
+
+# builds
+.next/
+out/
+dist/
+
+# runtime data
+backend/snapshots/
+backend/baseline/
+
+# os / editor
+.DS_Store
+*.tsbuildinfo
