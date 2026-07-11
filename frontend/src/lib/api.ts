@@ -6,6 +6,7 @@ import {
   type CaptureStatus,
   type FrameInfo,
   type HealthResponse,
+  type HistoryEntry,
   type ScanResult,
 } from './types';
 
@@ -59,6 +60,18 @@ export async function runAnalyze(
     throw new Error(detail?.detail ?? `analyze failed (${res.status})`);
   }
   return res.json();
+}
+
+/** Room cleanliness timeline, oldest first. */
+export async function getHistory(): Promise<HistoryEntry[]> {
+  const res = await fetch(`${API_URL}/history`);
+  if (!res.ok) throw new Error(`history failed (${res.status})`);
+  return res.json();
+}
+
+export async function wipeHistory(): Promise<void> {
+  const res = await fetch(`${API_URL}/history`, { method: 'DELETE' });
+  if (!res.ok) throw new Error(`wipe failed (${res.status})`);
 }
 
 export async function getHealth(): Promise<HealthResponse> {

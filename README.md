@@ -37,7 +37,7 @@ Ceiling-mounted Raspberry Pi camera that maps your room's cleanliness in real ti
 ### UI phase (commits resume here)
 - [x] **Stage 4 — Overlay UI**: red/green heat cells over the frame, scan animation, room rank (S–D)
 - [x] **Stage 7 — Vibe → analyze wiring**: VibePanel drives `POST /analyze`; per-zone reasons on hover; style notes + shopping list panels
-- [ ] **Stage 8 — History graph**: cleanliness-over-time chart from `/history`
+- [x] **Stage 8 — History graph**: cleanliness-over-time chart from `/history`
 - [ ] **Stage 9 — Polish + live Pi feed**
 
 ## Run

@@ -59,5 +59,13 @@ export interface CaptureStatus {
   latestSnapshotUrl?: string | null;
 }
 
+export interface HistoryEntry {
+  timestamp: number;
+  frameId?: string | null;
+  overallScore: number;
+  rank: string;
+  source: string;
+}
+
 export const API_URL =
   process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';

@@ -9,6 +9,7 @@ import type {
   HealthResponse,
 } from '@/lib/types';
 import { CaptureDeck } from '@/components/capture/CaptureDeck';
+import { HistoryPanel } from '@/components/history/HistoryPanel';
 import { ZoneOverlay } from '@/components/overlay/ZoneOverlay';
 import { VibePanel, type VibeData } from '@/components/vibe/VibePanel';
 
@@ -33,6 +34,7 @@ export default function Home() {
   const [scanning, setScanning] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [scanError, setScanError] = useState<string | null>(null);
+  const [historyToken, setHistoryToken] = useState(0);
   const [vibe, setVibe] = useState<VibeData>(EMPTY_VIBE);
 
   useEffect(() => {
@@ -70,6 +72,7 @@ export default function Home() {
     setScanError(null);
     try {
       setScan(await runScan());
+      setHistoryToken((token) => token + 1);
       setStep(3);
     } catch (err) {
       setScanError(err instanceof Error ? err.message : 'scan failed');
@@ -83,6 +86,7 @@ export default function Home() {
     setScanError(null);
     try {
       setScan(await runAnalyze(vibe.text, vibe.inspo));
+      setHistoryToken((token) => token + 1);
       setStep(3);
     } catch (err) {
       setScanError(err instanceof Error ? err.message : 'analyze failed');
@@ -332,6 +336,8 @@ export default function Home() {
           )}
         </section>
       )}
+
+      {step === 3 && <HistoryPanel refreshToken={historyToken} />}
     </main>
   );
 }
