@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { setBaseline, uploadFrame } from '@/lib/api';
 import type { FrameInfo } from '@/lib/types';
 
@@ -25,6 +25,7 @@ export function CaptureDeck({ onFrameStored, onBaselineStored }: CaptureDeckProp
   const [busy, setBusy] = useState<'frame' | 'baseline' | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [flash, setFlash] = useState(false);
+  const reducedMotion = useReducedMotion();
 
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
@@ -68,8 +69,10 @@ export function CaptureDeck({ onFrameStored, onBaselineStored }: CaptureDeckProp
           if (old) URL.revokeObjectURL(old);
           return URL.createObjectURL(blob);
         });
-        setFlash(true);
-        setTimeout(() => setFlash(false), 180);
+        if (!reducedMotion) {
+          setFlash(true);
+          setTimeout(() => setFlash(false), 180);
+        }
       },
       'image/jpeg',
       0.9,

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { API_URL, type ScanResult, type Zone } from '@/lib/types';
 
 interface ZoneOverlayProps {
@@ -35,13 +35,18 @@ function statusWord(score: number): string {
 export function ZoneOverlay({ scan }: ZoneOverlayProps) {
   const [hovered, setHovered] = useState<Zone | null>(null);
   const [sweeping, setSweeping] = useState(true);
+  const reducedMotion = useReducedMotion();
 
-  // re-run the sweep every time a new scan lands
+  // re-run the sweep every time a new scan lands (skipped under reduced motion)
   useEffect(() => {
+    if (reducedMotion) {
+      setSweeping(false);
+      return;
+    }
     setSweeping(true);
     const timer = setTimeout(() => setSweeping(false), SWEEP_DURATION_S * 1000);
     return () => clearTimeout(timer);
-  }, [scan]);
+  }, [scan, reducedMotion]);
 
   const cellWidth = 100 / scan.gridCols;
   const cellHeight = 100 / scan.gridRows;
@@ -79,11 +84,13 @@ export function ZoneOverlay({ scan }: ZoneOverlayProps) {
                     ? 'inset 0 0 0 2px var(--color-scan)'
                     : undefined,
               }}
-              initial={{ opacity: 0 }}
+              initial={{ opacity: reducedMotion ? 1 : 0 }}
               animate={{ opacity: 1 }}
               transition={{
-                delay: (zone.col / scan.gridCols) * SWEEP_DURATION_S,
-                duration: 0.35,
+                delay: reducedMotion
+                  ? 0
+                  : (zone.col / scan.gridCols) * SWEEP_DURATION_S,
+                duration: reducedMotion ? 0 : 0.35,
                 ease: 'easeOut',
               }}
               onMouseEnter={() => setHovered(zone)}

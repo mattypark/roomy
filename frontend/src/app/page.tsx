@@ -10,6 +10,7 @@ import type {
 } from '@/lib/types';
 import { CaptureDeck } from '@/components/capture/CaptureDeck';
 import { HistoryPanel } from '@/components/history/HistoryPanel';
+import { LiveFeed } from '@/components/live/LiveFeed';
 import { ZoneOverlay } from '@/components/overlay/ZoneOverlay';
 import { VibePanel, type VibeData } from '@/components/vibe/VibePanel';
 
@@ -181,6 +182,7 @@ export default function Home() {
               <p className="mt-3 text-sm text-[var(--color-dirty)]">{scanError}</p>
             )}
           </section>
+          <LiveFeed />
         </>
       )}
 
