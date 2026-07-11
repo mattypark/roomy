@@ -36,11 +36,11 @@ Ceiling-mounted Raspberry Pi camera that maps your room's cleanliness in real ti
 ## Run
 
 ```bash
-# backend
+# backend (Python 3.10+ required — use uv)
 cd backend
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
+uv venv --python 3.13 .venv
+uv pip install -r requirements.txt --python .venv/bin/python
+.venv/bin/uvicorn main:app --reload --port 8000
 
 # frontend (separate terminal)
 cd frontend
@@ -49,4 +49,3 @@ npm run dev   # http://localhost:3000
 ```
 
 Runs keyless — local CV needs no API key. Claude features activate when `ANTHROPIC_API_KEY` is set (see `.env.example`).
-# roomy
