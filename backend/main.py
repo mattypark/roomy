@@ -13,7 +13,7 @@ from vision import grid_scorer
 
 load_dotenv()
 
-STAGE = 3
+STAGE = 4
 MAX_UPLOAD_BYTES = 15 * 1024 * 1024  # 15 MB — plenty for a room photo
 
 app = FastAPI(title="roomy", version="0.2.0")

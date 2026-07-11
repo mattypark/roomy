@@ -29,7 +29,7 @@ Ceiling-mounted Raspberry Pi camera that maps your room's cleanliness in real ti
 - [x] **Stage 1 — Tech stack & scaffold**: repo structure, Next.js frontend, FastAPI backend, shared types
 - [x] **Stage 2 — Capture layer**: webcam + photo upload → backend snapshot pipeline, clean-baseline capture
 - [x] **Stage 3 — Local CV clutter engine**: grid scoring via edge density, color variance, baseline diff
-- [ ] **Stage 4 — Overlay UI**: red/green heat cells over the frame, scan animation, room rank (S–D)
+- [x] **Stage 4 — Overlay UI**: red/green heat cells over the frame, scan animation, room rank (S–D)
 - [ ] **Stage 5 — Claude deep analysis + vibe engine**: per-zone reasoning + vibe-matched suggestions
 - [ ] **Stage 6 — Pi agent**: picamera2 capture script for the ceiling-mounted Raspberry Pi
 

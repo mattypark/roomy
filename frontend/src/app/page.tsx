@@ -10,6 +10,7 @@ import type {
 } from '@/lib/types';
 import { API_URL } from '@/lib/types';
 import { CaptureDeck } from '@/components/capture/CaptureDeck';
+import { ZoneOverlay } from '@/components/overlay/ZoneOverlay';
 
 export default function Home() {
   const [health, setHealth] = useState<HealthResponse | null>(null);
@@ -51,7 +52,9 @@ export default function Home() {
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col gap-6 px-6 py-10">
       <header className="flex items-end justify-between">
         <div>
-          <p className="telemetry">ceiling overwatch // stage 2</p>
+          <p className="telemetry">
+            ceiling overwatch{health ? ` // stage ${health.stage}` : ''}
+          </p>
           <h1 className="mt-1 text-4xl font-bold tracking-tight">roomy</h1>
         </div>
         <BackendDot health={health} error={healthError} />
@@ -117,29 +120,32 @@ export default function Home() {
           </button>
         </div>
         {scan ? (
-          <div className="flex items-center gap-6">
-            <p
-              className="text-6xl font-bold"
-              style={{
-                color:
-                  scan.overallScore < 0.25
-                    ? 'var(--color-clean)'
-                    : scan.overallScore < 0.5
-                      ? 'var(--color-scan)'
-                      : 'var(--color-dirty)',
-              }}
-            >
-              {scan.rank}
-            </p>
-            <div className="text-sm">
-              <p>clutter {(scan.overallScore * 100).toFixed(1)}%</p>
-              <p className="text-[var(--color-text-dim)]">
-                {scan.gridRows}×{scan.gridCols} zones · frame {scan.frameId}
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-6">
+              <p
+                className="text-6xl font-bold"
+                style={{
+                  color:
+                    scan.overallScore < 0.25
+                      ? 'var(--color-clean)'
+                      : scan.overallScore < 0.5
+                        ? 'var(--color-scan)'
+                        : 'var(--color-dirty)',
+                }}
+              >
+                {scan.rank}
               </p>
-              <p className="text-[var(--color-text-dim)]">
-                baseline {scan.baselineUsed ? 'used' : 'not set — absolute mode'}
-              </p>
+              <div className="text-sm">
+                <p>clutter {(scan.overallScore * 100).toFixed(1)}%</p>
+                <p className="text-[var(--color-text-dim)]">
+                  {scan.gridRows}×{scan.gridCols} zones · frame {scan.frameId}
+                </p>
+                <p className="text-[var(--color-text-dim)]">
+                  baseline {scan.baselineUsed ? 'used' : 'not set — absolute mode'}
+                </p>
+              </div>
             </div>
+            <ZoneOverlay scan={scan} />
           </div>
         ) : (
           <p className="text-sm text-[var(--color-text-dim)]">
