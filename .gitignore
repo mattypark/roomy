@@ -17,6 +17,7 @@ dist/
 # runtime data
 backend/snapshots/
 backend/baseline/
+backend/history/
 
 # os / editor
 .DS_Store

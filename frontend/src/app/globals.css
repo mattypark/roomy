@@ -1,23 +1,32 @@
 @import 'tailwindcss';
 
-/* roomy — tactical overwatch HUD. Dark ops surface, semantic clean/dirty
-   green–red axis, monospace telemetry accents. */
+/* roomy — paper lab. Warm white surface, black ink, monospace telemetry.
+   Green/red reserved strictly for the clean/dirty semantic axis. */
 :root {
-  --color-surface: oklch(16% 0.012 260);
-  --color-surface-raised: oklch(21% 0.015 260);
-  --color-line: oklch(32% 0.02 260);
-  --color-text: oklch(93% 0.01 260);
-  --color-text-dim: oklch(62% 0.015 260);
+  --color-surface: oklch(98.3% 0.003 90);
+  --color-surface-raised: oklch(100% 0 0);
+  --color-line: oklch(89% 0.004 90);
+  --color-ink: oklch(16% 0 0);
+  --color-text: oklch(18% 0 0);
+  --color-text-dim: oklch(52% 0.005 90);
 
-  /* semantic cleanliness axis */
-  --color-clean: oklch(75% 0.19 150);
-  --color-dirty: oklch(62% 0.24 27);
-  --color-scan: oklch(80% 0.16 195);
+  /* semantic cleanliness axis — the only color in the system */
+  --color-clean: oklch(58% 0.16 150);
+  --color-dirty: oklch(54% 0.2 27);
+  --color-scan: oklch(16% 0 0);
 
   --font-mono: 'SF Mono', ui-monospace, 'JetBrains Mono', monospace;
 
+  --radius-card: 12px;
+  --radius-inner: 8px;
+
   --duration-fast: 150ms;
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -25,10 +34,119 @@ body {
   color: var(--color-text);
 }
 
+h1,
+h2 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+img {
+  outline: 1px solid rgba(0, 0, 0, 0.08);
+  outline-offset: -1px;
+}
+
 .telemetry {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  font-size: 0.7rem;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--color-text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- shared controls ------------------------------------------------- */
+
+.card {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  padding: 1.25rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5ch;
+  min-height: 44px;
+  padding: 0 1.1rem;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-inner);
+  background: var(--color-surface-raised);
+  color: var(--color-ink);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition-property: transform, background-color, color, border-color, box-shadow;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: ease-out;
+}
+
+.btn:hover {
+  background: var(--color-ink);
+  color: var(--color-surface-raised);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.btn-ghost {
+  border-color: var(--color-line);
+  color: var(--color-text);
+}
+
+.btn-ghost:hover {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-color: var(--color-ink);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: var(--color-surface-raised);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  position: relative;
+  transition-property: background-color, color, border-color, transform;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: ease-out;
+}
+
+/* expanded hit area — chips are visually small */
+.chip::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+}
+
+.chip:hover {
+  border-color: var(--color-ink);
+}
+
+.chip:active {
+  transform: scale(0.96);
 }

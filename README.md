@@ -24,14 +24,21 @@ Ceiling-mounted Raspberry Pi camera that maps your room's cleanliness in real ti
 
 **Hybrid vision:** a cheap local CV pass (OpenCV grid scoring against a "clean baseline" frame) runs constantly and free. Claude Vision runs on demand for deep analysis — it explains *why* a zone is messy and suggests items/changes matching your described style ("dark academia", "clean tech minimal").
 
-## Build stages
+## Build phases
 
+### Technical phase (backend) — DONE
 - [x] **Stage 1 — Tech stack & scaffold**: repo structure, Next.js frontend, FastAPI backend, shared types
 - [x] **Stage 2 — Capture layer**: webcam + photo upload → backend snapshot pipeline, clean-baseline capture
-- [x] **Stage 3 — Local CV clutter engine**: grid scoring via edge density, color variance, baseline diff
+- [x] **Stage 3 — Local CV clutter engine**: grid scoring via edge density, color variance, baseline diff (14 tests)
+- [x] **Stage 5 — Claude deep analysis + vibe engine**: `POST /analyze` — frame + inspo photos + vibe text → per-zone reasons, style notes, shopping list. Strict tool schema, keyless demo mode, graceful local fallback on API errors
+- [x] **Stage 5.5 — Scan history timeline**: every scan logged to JSONL; `GET /history` = room-cleanliness-over-time signal
+- [x] **Stage 6 — Pi agent**: `pi-agent/capture.py` — picamera2 on the Pi, OpenCV webcam on dev machines, retry/backoff, systemd unit ([setup](./pi-agent/README.md))
+
+### UI phase (commits resume here)
 - [x] **Stage 4 — Overlay UI**: red/green heat cells over the frame, scan animation, room rank (S–D)
-- [ ] **Stage 5 — Claude deep analysis + vibe engine**: per-zone reasoning + vibe-matched suggestions
-- [ ] **Stage 6 — Pi agent**: picamera2 capture script for the ceiling-mounted Raspberry Pi
+- [x] **Stage 7 — Vibe → analyze wiring**: VibePanel drives `POST /analyze`; per-zone reasons on hover; style notes + shopping list panels
+- [ ] **Stage 8 — History graph**: cleanliness-over-time chart from `/history`
+- [ ] **Stage 9 — Polish + live Pi feed**
 
 ## Run
 

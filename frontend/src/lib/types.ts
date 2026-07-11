@@ -26,6 +26,19 @@ export interface ScanResult {
   baselineUsed?: boolean;
 }
 
+export interface ShoppingItem {
+  item: string;
+  why: string;
+}
+
+/** Deep analysis = local CV scan enriched by Claude Vision. */
+export interface AnalysisResult extends ScanResult {
+  styleNotes?: string | null;
+  shoppingList?: ShoppingItem[];
+  /** set when Claude was requested but unavailable — local scan fallback */
+  warning?: string | null;
+}
+
 export interface HealthResponse {
   status: string;
   stage: number;

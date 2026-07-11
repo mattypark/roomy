@@ -2,6 +2,7 @@
 
 import {
   API_URL,
+  type AnalysisResult,
   type CaptureStatus,
   type FrameInfo,
   type HealthResponse,
@@ -39,6 +40,23 @@ export async function runScan(): Promise<ScanResult> {
   if (!res.ok) {
     const detail = await res.json().catch(() => null);
     throw new Error(detail?.detail ?? `scan failed (${res.status})`);
+  }
+  return res.json();
+}
+
+/** Deep analysis: local CV + Claude Vision, driven by the user's vibe. */
+export async function runAnalyze(
+  vibeText: string,
+  inspo: string[],
+): Promise<AnalysisResult> {
+  const res = await fetch(`${API_URL}/analyze`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ vibeText, inspo }),
+  });
+  if (!res.ok) {
+    const detail = await res.json().catch(() => null);
+    throw new Error(detail?.detail ?? `analyze failed (${res.status})`);
   }
   return res.json();
 }

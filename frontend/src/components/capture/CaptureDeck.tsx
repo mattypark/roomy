@@ -102,18 +102,15 @@ export function CaptureDeck({ onFrameStored, onBaselineStored }: CaptureDeckProp
     }
   }
 
-  const buttonBase =
-    'rounded border border-[var(--color-line)] px-4 py-2 text-sm transition-colors duration-150 hover:border-[var(--color-scan)] disabled:pointer-events-none disabled:opacity-40';
-
   return (
-    <section className="rounded-lg border border-[var(--color-line)] bg-[var(--color-surface-raised)] p-5">
+    <section className="card">
       <div className="mb-4 flex items-center justify-between">
         <p className="telemetry">capture deck // dev mode</p>
-        <p className="telemetry text-[var(--color-scan)]">pi cam: stage 6</p>
+        <p className="telemetry">pi cam · stage 6</p>
       </div>
 
       {/* viewport: live feed or captured preview */}
-      <div className="relative aspect-video overflow-hidden rounded border border-[var(--color-line)] bg-black">
+      <div className="relative aspect-video overflow-hidden rounded-[var(--radius-inner)] border border-[var(--color-line)] bg-neutral-950">
         <video
           ref={videoRef}
           muted
@@ -127,7 +124,7 @@ export function CaptureDeck({ onFrameStored, onBaselineStored }: CaptureDeckProp
         )}
         {camera !== 'live' && !preview && (
           <div className="flex h-full items-center justify-center">
-            <p className="telemetry">no signal — start camera or upload photo</p>
+            <p className="telemetry" style={{ color: "rgba(255,255,255,0.55)" }}>no signal — start camera or upload photo</p>
           </div>
         )}
         <AnimatePresence>
@@ -142,7 +139,7 @@ export function CaptureDeck({ onFrameStored, onBaselineStored }: CaptureDeckProp
           )}
         </AnimatePresence>
         {camera === 'live' && preview && (
-          <div className="absolute bottom-2 right-2 w-28 overflow-hidden rounded border border-[var(--color-line)]">
+          <div className="absolute bottom-2 right-2 w-28 overflow-hidden rounded border border-white/30">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={preview} alt="last capture" className="block w-full" />
           </div>
@@ -153,23 +150,23 @@ export function CaptureDeck({ onFrameStored, onBaselineStored }: CaptureDeckProp
       <div className="mt-4 flex flex-wrap gap-2">
         {camera === 'live' ? (
           <>
-            <button className={buttonBase} onClick={snapFrame}>
+            <button className="btn btn-ghost" onClick={snapFrame}>
               ◉ snap frame
             </button>
-            <button className={buttonBase} onClick={stopCamera}>
+            <button className="btn btn-ghost" onClick={stopCamera}>
               stop camera
             </button>
           </>
         ) : (
           <button
-            className={buttonBase}
+            className="btn btn-ghost"
             onClick={startCamera}
             disabled={camera === 'starting'}
           >
             {camera === 'starting' ? 'starting…' : '▶ start camera'}
           </button>
         )}
-        <button className={buttonBase} onClick={() => fileInputRef.current?.click()}>
+        <button className="btn btn-ghost" onClick={() => fileInputRef.current?.click()}>
           ⇪ upload photo
         </button>
         <input
@@ -184,14 +181,14 @@ export function CaptureDeck({ onFrameStored, onBaselineStored }: CaptureDeckProp
       {/* send-to-backend actions */}
       <div className="mt-3 flex flex-wrap gap-2">
         <button
-          className={`${buttonBase} border-[var(--color-scan)] text-[var(--color-scan)]`}
+          className="btn"
           onClick={() => send('frame')}
           disabled={!frameBlob || busy !== null}
         >
           {busy === 'frame' ? 'sending…' : '↗ send frame'}
         </button>
         <button
-          className={`${buttonBase} border-[var(--color-clean)] text-[var(--color-clean)]`}
+          className="btn"  style={{ borderColor: "var(--color-clean)", color: "var(--color-clean)" }}
           onClick={() => send('baseline')}
           disabled={!frameBlob || busy !== null}
         >

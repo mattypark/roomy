@@ -107,35 +107,46 @@ export function ZoneOverlay({ scan }: ZoneOverlayProps) {
       </div>
 
       {/* inspection bar */}
-      <div className="mt-2 flex items-center justify-between rounded border border-[var(--color-line)] px-3 py-2">
-        {hovered ? (
-          <p className="telemetry">
-            zone [{hovered.row},{hovered.col}] · clutter{' '}
-            {(hovered.clutterScore * 100).toFixed(0)}% ·{' '}
-            <span
-              style={{
-                color:
-                  hovered.clutterScore < CLEAN_FLOOR
-                    ? 'var(--color-clean)'
-                    : hovered.clutterScore < 0.4
-                      ? 'var(--color-scan)'
-                      : 'var(--color-dirty)',
-              }}
-            >
-              {statusWord(hovered.clutterScore)}
+      <div className="mt-2 rounded border border-[var(--color-line)] px-3 py-2">
+        <div className="flex items-center justify-between">
+          {hovered ? (
+            <p className="telemetry num">
+              zone [{hovered.row},{hovered.col}] · clutter{' '}
+              {(hovered.clutterScore * 100).toFixed(0)}% ·{' '}
+              <span
+                style={{
+                  color:
+                    hovered.clutterScore < CLEAN_FLOOR
+                      ? 'var(--color-clean)'
+                      : hovered.clutterScore < 0.4
+                        ? 'var(--color-scan)'
+                        : 'var(--color-dirty)',
+                }}
+              >
+                {statusWord(hovered.clutterScore)}
+              </span>
+            </p>
+          ) : (
+            <p className="telemetry">hover zones to inspect</p>
+          )}
+          <div className="flex items-center gap-3">
+            <span className="telemetry flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-sm bg-[var(--color-clean)]" /> clean
             </span>
-          </p>
-        ) : (
-          <p className="telemetry">hover zones to inspect</p>
-        )}
-        <div className="flex items-center gap-3">
-          <span className="telemetry flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-sm bg-[var(--color-clean)]" /> clean
-          </span>
-          <span className="telemetry flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-sm bg-[var(--color-dirty)]" /> clean it
-          </span>
+            <span className="telemetry flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-sm bg-[var(--color-dirty)]" /> clean it
+            </span>
+          </div>
         </div>
+        {/* Claude's per-zone read — present after a deep analysis */}
+        {hovered?.reason && (
+          <div className="mt-2 border-t border-[var(--color-line)] pt-2 text-sm">
+            <p>{hovered.reason}</p>
+            {hovered.suggestion && (
+              <p className="mt-1 text-[var(--color-text-dim)]">→ {hovered.suggestion}</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
