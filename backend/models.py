@@ -32,3 +32,21 @@ class HealthResponse(BaseModel):
     status: str
     stage: int
     claudeEnabled: bool
+
+
+class FrameInfo(BaseModel):
+    """Metadata for a stored frame (snapshot or baseline)."""
+
+    id: str
+    width: int
+    height: int
+    capturedAt: float
+    url: str
+
+
+class CaptureStatus(BaseModel):
+    """What the capture pipeline currently holds."""
+
+    baselineSet: bool
+    latestSnapshotId: str | None = None
+    latestSnapshotUrl: str | None = None

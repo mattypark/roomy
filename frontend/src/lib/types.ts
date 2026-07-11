@@ -28,5 +28,19 @@ export interface HealthResponse {
   claudeEnabled: boolean;
 }
 
+export interface FrameInfo {
+  id: string;
+  width: number;
+  height: number;
+  capturedAt: number;
+  url: string;
+}
+
+export interface CaptureStatus {
+  baselineSet: boolean;
+  latestSnapshotId?: string | null;
+  latestSnapshotUrl?: string | null;
+}
+
 export const API_URL =
   process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
