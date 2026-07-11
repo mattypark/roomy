@@ -26,6 +26,10 @@ class ScanResult(BaseModel):
     rank: str
     # "local" = CV grid pass, "claude" = deep analysis, "demo" = mocked
     source: str
+    # which stored frame was scanned (for drawing the overlay on it)
+    frameId: str | None = None
+    frameUrl: str | None = None
+    baselineUsed: bool = False
 
 
 class HealthResponse(BaseModel):

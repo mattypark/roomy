@@ -73,6 +73,13 @@ def load_baseline() -> np.ndarray | None:
     return cv2.imread(str(BASELINE_PATH), cv2.IMREAD_COLOR)
 
 
+def load_snapshot(frame_id: str) -> np.ndarray | None:
+    path = SNAPSHOT_DIR / f"{frame_id}.jpg"
+    if not path.exists():
+        return None
+    return cv2.imread(str(path), cv2.IMREAD_COLOR)
+
+
 def latest_snapshot_info() -> dict | None:
     snapshots = sorted(SNAPSHOT_DIR.glob("*.jpg"))
     if not snapshots:

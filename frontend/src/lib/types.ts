@@ -20,6 +20,10 @@ export interface ScanResult {
   rank: string;
   /** "local" = CV grid pass, "claude" = deep analysis, "demo" = mocked */
   source: 'local' | 'claude' | 'demo';
+  /** which stored frame was scanned (for drawing the overlay on it) */
+  frameId?: string | null;
+  frameUrl?: string | null;
+  baselineUsed?: boolean;
 }
 
 export interface HealthResponse {

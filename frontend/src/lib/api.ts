@@ -5,6 +5,7 @@ import {
   type CaptureStatus,
   type FrameInfo,
   type HealthResponse,
+  type ScanResult,
 } from './types';
 
 async function postImage(path: string, blob: Blob): Promise<FrameInfo> {
@@ -29,6 +30,16 @@ export function setBaseline(blob: Blob): Promise<FrameInfo> {
 export async function getStatus(): Promise<CaptureStatus> {
   const res = await fetch(`${API_URL}/status`);
   if (!res.ok) throw new Error(`status failed (${res.status})`);
+  return res.json();
+}
+
+/** Run the local CV clutter engine on the latest stored frame. */
+export async function runScan(): Promise<ScanResult> {
+  const res = await fetch(`${API_URL}/scan`, { method: 'POST' });
+  if (!res.ok) {
+    const detail = await res.json().catch(() => null);
+    throw new Error(detail?.detail ?? `scan failed (${res.status})`);
+  }
   return res.json();
 }
 

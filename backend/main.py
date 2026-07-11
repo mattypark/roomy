@@ -8,11 +8,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 import storage
-from models import CaptureStatus, FrameInfo, HealthResponse
+from models import CaptureStatus, FrameInfo, HealthResponse, ScanResult
+from vision import grid_scorer
 
 load_dotenv()
 
-STAGE = 2
+STAGE = 3
 MAX_UPLOAD_BYTES = 15 * 1024 * 1024  # 15 MB — plenty for a room photo
 
 app = FastAPI(title="roomy", version="0.2.0")
@@ -62,6 +63,36 @@ async def set_baseline(file: UploadFile) -> FrameInfo:
     """Store the clean-baseline reference frame — the 'room at its best' shot."""
     image = await _read_image(file)
     return FrameInfo(**storage.save_baseline(image))
+
+
+@app.post("/scan", response_model=ScanResult)
+async def scan_frame(file: UploadFile | None = None) -> ScanResult:
+    """Run the local CV clutter engine.
+
+    With a file: scans that frame (stored as a snapshot first).
+    Without: scans the latest stored snapshot.
+    Uses the clean baseline automatically when one is set.
+    """
+    if file is not None:
+        image = await _read_image(file)
+        info = storage.save_snapshot(image)
+    else:
+        latest = storage.latest_snapshot_info()
+        if latest is None:
+            raise HTTPException(status_code=404, detail="no frame to scan — capture one first")
+        image = storage.load_snapshot(latest["id"])
+        if image is None:
+            raise HTTPException(status_code=404, detail="stored frame unreadable")
+        info = latest
+
+    baseline = storage.load_baseline()
+    result = grid_scorer.scan(image, baseline=baseline)
+    return ScanResult(
+        **result,
+        frameId=info["id"],
+        frameUrl=info["url"],
+        baselineUsed=baseline is not None,
+    )
 
 
 @app.get("/status", response_model=CaptureStatus)
